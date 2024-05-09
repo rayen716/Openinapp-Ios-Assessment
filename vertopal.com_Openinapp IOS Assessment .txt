@@ -1,0 +1,116 @@
+
+
+    import SwiftUI
+
+    struct ContentView: View {
+        @State private var greeting = ""
+        @State private var chartData: [ChartData] = []
+        @State private var topLinks: [Link] = []
+        @State private var recentLinks: [Link] = []
+
+        var body: some View {
+            NavigationView {
+                TabView {
+                    VStack {
+                        Text(greeting)
+                         .font(.largeTitle)
+                         .padding()
+
+                        ChartView(data: chartData)
+                         .frame(height: 300)
+
+                        List(topLinks, id: \.id) { link in
+                            VStack(alignment:.leading) {
+                                Text(link.title)
+                                 .font(.headline)
+                                Text(link.url)
+                                 .foregroundColor(.secondary)
+                            }
+                        }
+                     .navigationTitle("Top Links")
+                    }
+                 .tabItem {
+                        Image(systemName: "chart.bar")
+                        Text("Top Links")
+                    }
+
+                    List(recentLinks, id: \.id) { link in
+                        VStack(alignment:.leading) {
+                            Text(link.title)
+                             .font(.headline)
+                            Text(link.url)
+                             .foregroundColor(.secondary)
+                        }
+                    }
+                 .navigationTitle("Recent Links")
+                 .tabItem {
+                        Image(systemName: "clock")
+                        Text("Recent Links")
+                    }
+                }
+             .onAppear {
+                    loadGreeting()
+                    loadChartData()
+                    loadLinks()
+                }
+            }
+        }
+
+        func loadGreeting() {
+            let currentTime = Date()
+            let hour = Calendar.current.component(.hour, from: currentTime)
+            if hour < 12 {
+                greeting = "Good morning"
+            } else if hour < 18 {
+                greeting = "Good afternoon"
+            } else {
+                greeting = "Good evening"
+            }
+        }
+
+        func loadChartData() {
+            // Load chart data from API response
+            // Replace with your API call
+            chartData = [
+                ChartData(value: 10, label: "Label 1"),
+                ChartData(value: 20, label: "Label 2"),
+                ChartData(value: 30, label: "Label 3"),
+            ]
+        }
+
+        func loadLinks() {
+            // Load links from API response
+            // Replace with your API call
+            topLinks = [
+                Link(id: 1, title: "Link 1", url: "https://example.com/link1"),
+                Link(id: 2, title: "Link 2", url: "https://example.com/link2"),
+            ]
+
+            recentLinks = [
+                Link(id: 3, title: "Link 3", url: "https://example.com/link3"),
+                Link(id: 4, title: "Link 4", url: "https://example.com/link4"),
+            ]
+        }
+    }
+
+    struct ChartData: Identifiable {
+        let id = UUID()
+        var value: Int
+        var label: String
+    }
+
+    struct Link: Identifiable {
+        let id: Int
+        var title: String
+        var url: String
+    }
+
+    struct ChartView: View {
+        let data: [ChartData]
+
+        var body: some View {
+            // Implement your chart view here
+            // Replace with your chart implementation
+            Text("Chart View")
+        }
+    }
